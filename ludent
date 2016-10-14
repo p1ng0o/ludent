@@ -158,6 +158,10 @@ local indent = function(src,dst)
       -- Remove all spaces between colon
       line = string.gsub(line, "([%s]*[,])", ",")
 
+      -- remove trailing and leading whitespace from string.
+      -- http://lua-users.org/wiki/CommonFunctions
+      line = string.gsub(line, "^%s*(.-)%s*$", "%1")
+
       if string.len(line) > 0 then
         dst:write(string.rep(indent_str,level)..line)
         print(string.rep(indent_str,level)..line)
