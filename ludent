@@ -83,6 +83,11 @@ if os.getenv('LUDENTDEBUG') == '1' then
   debugp = print
 end
 
+local debugp2 = function() end
+if os.getenv('LUDENTDEBUG') == '2' then
+  debugp2 = print
+end
+
 local indent = function(src,dst)
   assert(src,dst)
   local isCommentBlock = false
@@ -171,7 +176,7 @@ local indent = function(src,dst)
 
       if string.len(line) > 0 then
         dst:write(string.rep(indent_str,level)..line)
-        print(string.rep(indent_str,level)..line)
+        debugp2(string.rep(indent_str,level)..line)
       end
       dst:write('\n')
 
@@ -183,7 +188,7 @@ local indent = function(src,dst)
       debugp("Skipping comment block.")
       if string.len(line) > 0 then
         dst:write(string.rep(indent_str,level)..line)
-        print(string.rep(indent_str,level)..line)
+        debugp2(string.rep(indent_str,level)..line)
       end
       dst:write('\n')
     end
