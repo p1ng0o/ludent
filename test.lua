@@ -72,3 +72,34 @@ else
     3
   )
 end
+
+local a = function(a, b    )
+  print(
+    1, 2
+  )
+end
+
+
+local a = function(  a, b)
+  print(
+    1, 2
+  )
+end
+
+local a = function(a, b)
+  print(
+    1,          2
+  )
+end
+
+local a = function(a, b)
+  print(
+    1            , 2
+  )
+end
+
+local p = {  12, 45}
+local p = {12, 45 }
+
+local string = "132,456,789",   "123,456",   "456,789",    "123,456"
+local string = '132,456,789',     '456,789'
