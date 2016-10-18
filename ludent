@@ -46,16 +46,7 @@ local opens_function = function(line)
   end
 end
 
-local spaces ={
-  {match="%(", gsub="[%(]", replace="("},
-  {match="%)", gsub="[%)]", replace=") "},
-  {match="{", gsub="[%{]", replace=" {"},
-  {match="}", gsub="[%}]", replace="}"},
-  {match=",", gsub="[,]", replace=", "},
-  {match="(%.%.)", gsub="(%.%.)", replace=" .. "},
-}
-
-local posts ={
+local posts = {
   ['.*then$'] = 1,
   ['^repeat%s*$'] = 1,
   ['.*do%s*$'] = 1,
@@ -85,26 +76,6 @@ local isolate = function(l)
   end
 
   return trim(pure)
-end
-
-local beautify = function(line, patternMatch, patternGsub, replace)
-  assert(type(line) == "string", "line must be of type string")
-  assert(type(patternMatch) == "string", "patternMatch must be of type string")
-  assert(type(patternGsub) == "string", "patternGsub must be of type string")
-  assert(type(replace) == "string", "replace must be of type string")
-
-  local output = line
-
-  if output:match("(['].*" .. patternMatch ..".*['])")then
-    output = output:gsub("(['])[%s]*" .. patternGsub .."[%s]+", "%1" .. replace)
-  elseif output:match('(["].*' .. patternMatch ..'.*["])')then
-    output = output:gsub('(["])[%s]*' .. patternGsub ..'[%s]+', '%1' .. replace)
-  else
-    output = output:gsub("([%s]*" .. patternGsub .. ")", replace)
-    output = output:gsub("(" .. patternGsub .. "[%s]+)", replace)
-  end
-
-  return output
 end
 
 local debugp = function() end
@@ -174,12 +145,24 @@ local indent = function(src,dst)
       level = level + pre
       assert(level >=0,line..' (pre/'..level..')')
 
-      assert(level >=0, line..' (pre/'..level..')')
+      -- First remove useless space, just after/before brackets
+      line = string.gsub(line, "([(][%s]+)", "(")
+      line = string.gsub(line, "([%s]+[)])", ")")
 
-      if(not line:match("%-%-"))then
-        for _, s in pairs (spaces) do
-          line = beautify(line, s.match, s.gsub, s.replace)
-        end
+      -- First remove useless space, just after/before embrace
+      line = string.gsub(line, "([{][%s]+)", "{")
+      line = string.gsub(line, "([%s]+[}])", "}")
+
+      -- Check to remove all colons outside strings
+      if line:match("(['].*,.*['])") then
+        line = string.gsub(line, "(['])[,][%s]+", "%1, ")
+      elseif line:match('(["].*,.*["])') then
+        line = string.gsub(line, '(["])[,][%s]+', '%1, ')
+      else
+        -- Add one and only one space after colon
+        line = string.gsub(line, "([,][%s]*)", ", ")
+        -- Remove all spaces between colon
+        line = string.gsub(line, "([%s]*[,])", ",")
       end
 
       -- remove trailing and leading whitespace from string.

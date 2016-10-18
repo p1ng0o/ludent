@@ -87,14 +87,12 @@ local a = function(  a, b)
 end
 
 local a = function(a, b)
-  print(a,b)
   print(
     1,          2
   )
 end
 
 local a = function(a, b)
-  print(  a  ,  b  )
   print(
     1            , 2
   )
@@ -105,8 +103,3 @@ local p = {12, 45 }
 
 local string = "132,456,789",   "123,456",   "456,789",    "123,456"
 local string = '132,456,789',     '456,789'
-
-
-local string = "123"..      "456"     .."789" .. "0"
-
--- local plop = "y  ,  o        (  u  ) ' r  { e  }  wel..come"
