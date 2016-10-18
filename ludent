@@ -46,11 +46,15 @@ local opens_function = function(line)
   end
 end
 
-local spaces ={
+local spaces  ={
   {match="%(", gsub="[%(]", replace="("},
-  {match="%)", gsub="[%)]", replace=") "},
-  {match="{", gsub="[%{]", replace=" {"},
+  {match="%)", gsub="[%)]", replace=")"},
+  {match="{", gsub="[%{]", replace="{"},
   {match="}", gsub="[%}]", replace="}"},
+  {match="==", gsub="(==)", replace=" == "},
+  {match="~=", gsub="(~=)", replace=" ~= "},
+  {match="<=", gsub="(<=)", replace=" <= "},
+  {match=">=", gsub="(>=)", replace=" >= "},
   {match=",", gsub="[,]", replace=", "},
   {match="(%.%.)", gsub="(%.%.)", replace=" .. "},
 }
@@ -96,12 +100,11 @@ local beautify = function(line, patternMatch, patternGsub, replace)
   local output = line
 
   if output:match("(['].*" .. patternMatch ..".*['])")then
-    output = output:gsub("(['])[%s]*" .. patternGsub .."[%s]+", "%1" .. replace)
+    output = output:gsub("(['])[%s]*" .. patternGsub .."[%s]*", "%1" .. replace)
   elseif output:match('(["].*' .. patternMatch ..'.*["])')then
-    output = output:gsub('(["])[%s]*' .. patternGsub ..'[%s]+', '%1' .. replace)
+    output = output:gsub('(["])[%s]*' .. patternGsub ..'[%s]*', '%1' .. replace)
   else
-    output = output:gsub("([%s]*" .. patternGsub .. ")", replace)
-    output = output:gsub("(" .. patternGsub .. "[%s]+)", replace)
+    output = output:gsub("(%s*" .. patternGsub .. "%s*)", replace)
   end
 
   return output
@@ -177,7 +180,7 @@ local indent = function(src,dst)
       assert(level >=0, line..' (pre/'..level..')')
 
       if(not line:match("%-%-"))then
-        for _, s in pairs (spaces) do
+        for _, s in pairs(spaces)do
           line = beautify(line, s.match, s.gsub, s.replace)
         end
       end
