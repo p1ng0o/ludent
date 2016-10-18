@@ -72,31 +72,3 @@ else
     3
   )
 end
-
-local a = function(a, b    )
-  print(
-    1, 2
-  )
-end
-
-
-local a = function(  a, b)
-  print(
-    1, 2
-  )
-end
-
-local a = function(a, b)
-  print(
-    1,          2
-  )
-end
-
-local a = function(a, b)
-  print(
-    1            , 2
-  )
-end
-
-local p = {  12, 45}
-local p = {12, 45 }

@@ -141,22 +141,8 @@ local indent = function(src,dst)
 
     if not isCommentBlock then
 
-
       level = level + pre
       assert(level >=0,line..' (pre/'..level..')')
-
-      -- First remove useless space, just after/before brackets
-      line = string.gsub(line, "([(][%s]+)", "(")
-      line = string.gsub(line, "([%s]+[)])", ")")
-
-      -- First remove useless space, just after/before embrace
-      line = string.gsub(line, "([{][%s]+)", "{")
-      line = string.gsub(line, "([%s]+[}])", "}")
-
-      -- Add one and only one space after colon
-      line = string.gsub(line, "([,][%s]*)", ", ")
-      -- Remove all spaces between colon
-      line = string.gsub(line, "([%s]*[,])", ",")
 
       -- remove trailing and leading whitespace from string.
       -- http://lua-users.org/wiki/CommonFunctions
