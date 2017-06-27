@@ -14,6 +14,11 @@ string.trim = function(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+string.trim_end = function(s)
+  return (s:gsub("^(.-)%s*$", "%1"))
+end
+
+
 local indent_str = '  '
 
 local level = 0
@@ -92,13 +97,13 @@ local indent = function(src,dst)
   assert(src,dst)
   local isCommentBlock = false
   for line in src:lines() do
-    line = line:trim() or ''
-    local pure = isolate(line)
+    local line_trimmed = line:trim() or ''
+    local pure = isolate(line_trimmed)
 
-    if line:match("%-%-%[%[") then
+    if line_trimmed:match("%-%-%[%[") then
       isCommentBlock = true
     end
-    if line:match("%]%]%-%-") or line:match("%]%]")  then
+    if line_trimmed:match("%]%]%-%-") or line_trimmed:match("%]%]")  then
       isCommentBlock = false
     end
 
@@ -147,27 +152,27 @@ local indent = function(src,dst)
     if not isCommentBlock then
 
       level = level + pre
-      assert(level >=0,line..' (pre/'..level..')')
+      assert(level >=0,line_trimmed..' (pre/'..level..')')
 
       -- remove trailing and leading whitespace from string.
       -- http://lua-users.org/wiki/CommonFunctions
-      line = string.gsub(line, "^%s*(.-)%s*$", "%1")
+      line_trimmed = string.gsub(line_trimmed, "^%s*(.-)%s*$", "%1")
 
-      if string.len(line) > 0 then
-        dst:write(string.rep(indent_str,level)..line)
-        debugp2(string.rep(indent_str,level)..line)
+      if string.len(line_trimmed) > 0 then
+        dst:write(string.rep(indent_str,level)..line_trimmed)
+        debugp2(string.rep(indent_str,level)..line_trimmed)
       end
       dst:write('\n')
 
-      if (line:sub(1, 2) ~= "--") then
+      if (line_trimmed:sub(1, 2) ~= "--") then
         level = level + post
       end
-      assert(level >=0,line..' (post/'..level..')')
+      assert(level >=0,line_trimmed..' (post/'..level..')')
     else
       debugp("Skipping comment block.")
-      if string.len(line) > 0 then
-        dst:write(string.rep(indent_str,level)..line)
-        debugp2(string.rep(indent_str,level)..line)
+      if string.len(line_trimmed) > 0 then
+        dst:write(string.rep(indent_str,level)..line:trim_end())
+        debugp2(string.rep(indent_str,level)..line:trim_end())
       end
       dst:write('\n')
     end
