@@ -1,11 +1,11 @@
 package = 'ludent'
 version = 'scm-1'
 source = {
-  url = 'git://github.com/lipp/ludent.git',
+  url = 'git://github.com/p1ng0o/ludent.git',
 }
 description = {
   summary = 'A naive Lua indenter / formater / beautifier.',
-  homepage = 'http://github.com/lipp/ludent',
+  homepage = 'http://github.com/p1ng0o/ludent',
   license = 'MIT/X11'
 }
 dependencies = {
